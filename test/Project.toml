@@ -1,0 +1,12 @@
+name = "test"
+uuid = "2d11e8ad-2b2b-4310-a3fe-fe17d14ec6ad"
+authors = ["tduretz <duretz@uni-frankfurt.de>"]
+version = "0.1.0"
+
+[deps]
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+StaticArrays = "1.9.13"
+Test = "1.11.0"
