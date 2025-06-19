@@ -6,6 +6,15 @@ The function `bfd_coefficients()` can be used to determine the BDF coefficient p
 
 ### Quick start
 
+In package mode (type `]` in Julia's REPL):
+1) `add https://github.com/tduretz/BackwardDifferenceFormula.jl`
+
+Go back to evaluation mode (press backspace)
+
+2) `using BackwardDifferenceFormula` 
+
+For the best experience, use [`StaticArrays`](https://github.com/JuliaArrays/StaticArrays.jl), as in the examples below.
+
 #### BDF 1
 
 ```julia 
