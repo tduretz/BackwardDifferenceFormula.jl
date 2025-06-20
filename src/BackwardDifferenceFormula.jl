@@ -2,24 +2,21 @@ module BackwardDifferenceFormula
 
 using StaticArrays
 
-@inline _Vandermonde(A::NTuple{N, NTuple{N, T}}) where {N,T} = SMatrix{N,N,T}(A[i][j] for i in 1:N, j in 1:N)
+@inline tupletoSMatrix(A::NTuple{N, NTuple{N, T}}) where {N,T} = SMatrix{N,N,T}(A[i][j] for i in 1:N, j in 1:N)
 
 @generated function Vandermonde(dt::Union{SVector{order},NTuple{order}}) where {order}
-
-    N = order
     quote
         @inline 
-        A = Base.Cartesian.@ntuple $N i -> begin
+        A = Base.Cartesian.@ntuple $order i -> begin
             _fact = 1 / factorial(i - 1)
             n     = i - 1
-            Base.Cartesian.@ntuple $N j -> begin
+            Base.Cartesian.@ntuple $order j -> begin
                 @fastmath dt[j]^n * _fact 
             end
         end
-        _Vandermonde(A)
+        tupletoSMatrix(A)
     end
 end
-
 
 """
     coeff = bdf_coefficients(tshift)
@@ -34,16 +31,14 @@ The reference current time should be 0, and the values of relative time for the 
     `coeff`` contains BDF coefficients. The first entry correspont to the next field value, e.g.:
     for BDF1:  (coeff[1]*u + coeff[2]*u0) = (u - u0) / Δt ≈ ∂u∂t
     for BDF2:  (coeff[1]*u + coeff[2]*u0 + coeff[3]*u00) ≈ ∂u∂t
-
-
 """
-function bdf_coefficients(tshift)
+function bdf_coefficients(tshift::Union{SVector{order, T}, NTuple{order, T}}) where {order, T}
     # Construct Vandermonde matrix
     A = Vandermonde(tshift)
 
     # # Righ hand side
-    rhs    = @MVector(zeros(length(tshift)))
-    rhs[2] = 1.0  # Representing the derivative
+    rhs    = @MVector zeros(T, order)
+    rhs[2] = one(T)  # Representing the derivative
 
     # Solve
     coeffs = A \ SVector(rhs)
