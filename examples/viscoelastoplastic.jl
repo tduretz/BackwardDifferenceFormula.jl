@@ -21,26 +21,26 @@ function viscoelastoplastic(bdf, n)
     Δt, Δt0, Δt00, Δt000 = Δt_ref, Δt_ref, Δt_ref, Δt_ref
 
     # Select integrator
-    if bdf==1 
-        tshift = @SVector([-Δt, 0.0])
+    if bdf == 1
+        tshift = @SVector [-Δt, 0.0]
         coeff  = bdf_coefficients(tshift)
-        a, b, c, d, e = coeff[1], coeff[2], 0, 0, 0
-    elseif bdf==2 
-        tshift = @SVector([-Δt-Δt0, -Δt, 0.0])
+        a, b, c, d, e = coeff..., 0, 0, 0
+    elseif bdf == 2
+        tshift = @SVector [-Δt-Δt0, -Δt, 0.0]
         coeff  = bdf_coefficients(tshift)
-        a, b, c, d, e = coeff[1], coeff[2], coeff[3], 0, 0
-    elseif bdf==3 
-        tshift = @SVector([-Δt-Δt0-Δt00, -Δt-Δt0, -Δt, 0.0])
+        a, b, c, d, e = coeff..., 0, 0
+    elseif bdf == 3
+        tshift = @SVector [-Δt-Δt0-Δt00, -Δt-Δt0, -Δt, 0.0]
         coeff  = bdf_coefficients(tshift)
-        a, b, c, d, e = coeff[1], coeff[2], coeff[3], coeff[4], 0
-    elseif bdf==4 
-        tshift = @SVector([-Δt-Δt0-Δt00-Δt000, -Δt-Δt0-Δt00, -Δt-Δt0, -Δt, 0.0])
+        a, b, c, d, e = coeff..., 0
+    elseif bdf == 4
+        tshift = @SVector [-Δt-Δt0-Δt00-Δt000, -Δt-Δt0-Δt00, -Δt-Δt0, -Δt, 0.0]
         coeff  = bdf_coefficients(tshift)
-        a, b, c, d, e = coeff[1], coeff[2], coeff[3], coeff[4], coeff[5]
+        a, b, c, d, e = coeff
     end
 
     # Time stepping
-    for it=1:Nt
+    for it in 1:Nt
 
         # Old stress values
         τ0000 = τ000
@@ -59,7 +59,7 @@ function viscoelastoplastic(bdf, n)
         F     = abs(τ) - C
 
         # Visco-elastic-plastic corrector
-        if F>0
+        if F > 0
             λ̇     = 0.5*F/ηve
             ε̇pl   = λ̇
             τ     = 2*ηve* (ε̇ - ε̇pl - (b*τ0 + c*τ00 + d*τ000 + e*τ0000)/2/G )
@@ -70,7 +70,7 @@ function viscoelastoplastic(bdf, n)
     # Exact solution
     t   = (1:Nt).*Δt
     τvec_ana = 2η*ε̇*(1 .- exp.(-G/η.*t))
-    τvec_ana[τvec_ana.>C] .= C
+    @views τvec_ana[τvec_ana.>C] .= C
     
     # Visualize
     p = plot(xlabel="Time", ylabel="Stress" )

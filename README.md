@@ -13,12 +13,12 @@ Go back to evaluation mode (press backspace)
 
 2) `using BackwardDifferenceFormula` 
 
-For the best experience, use [`StaticArrays`](https://github.com/JuliaArrays/StaticArrays.jl), as in the examples below.
+For the best experience, use [`StaticArrays`](https://github.com/JuliaArrays/StaticArrays.jl), as in the examples below, or `Tuple`s for the `tshift` argument.
 
 #### BDF 1
 
 ```julia 
-tshift = @SVector([-1.0, 0.0]) # assumes Δt = 1
+tshift = @SVector [-1.0, 0.0] # assumes Δt = 1
     
 coeff = bdf_coefficients(tshift)
 
@@ -29,7 +29,7 @@ The resulting coefficients should be those of backward-Euler, `1/Δt` and `-1/Δ
 #### BDF 2
 
 ```julia 
-tshift = @SVector([-2.0, -1.0, 0.0]) # assumes Δt = 1 and constant
+tshift = @SVector [-2.0, -1.0, 0.0] # assumes Δt = 1 and constant
     
 coeff = bdf_coefficients(tshift)
 
