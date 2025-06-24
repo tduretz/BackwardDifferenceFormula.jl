@@ -1,7 +1,7 @@
 name = "BackwardDifferenceFormula"
 uuid = "bb1c57f4-4a50-4dfd-96bc-51bda4983b9c"
 authors = ["tduretz <duretz@uni-frankfurt.de>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
