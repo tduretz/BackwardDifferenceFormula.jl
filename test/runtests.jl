@@ -6,7 +6,7 @@ function main()
     @testset "BDF1    " begin
 
         tshift = @SVector([-1.0, 0.0])
-    
+
         coeff = bdf_coefficients(tshift)
 
         # BDF1 (Backward Euler with Δt = 1.0)
@@ -20,7 +20,7 @@ function main()
     @testset "BDF2    " begin
 
         tshift = @SVector([-2.0, -1.0, 0.0])
-    
+
         coeff = bdf_coefficients(tshift)
 
         # BDF2 (with Δt = 1.0)
@@ -34,7 +34,7 @@ function main()
     @testset "BDF3    " begin
 
         tshift = @SVector([-3.0, -2.0, -1.0, 0.0])
-    
+
         coeff = bdf_coefficients(tshift)
 
         # BDF3 (with Δt = 1.0)
@@ -48,7 +48,7 @@ function main()
     @testset "BDF4    " begin
 
         tshift = @SVector([-4.0, -3.0, -2.0, -1.0, 0.0])
-    
+
         coeff = bdf_coefficients(tshift)
 
         # BDF4 (with Δt = 1.0)
@@ -59,7 +59,7 @@ function main()
             @test sum(coeff[i] .- coeff_BDF4[i]) ≈ 0 atol = 1e-15
         end
     end
-    
+
     return
 end
 

@@ -6,12 +6,12 @@ using StaticArrays
 
 @generated function Vandermonde(dt::Union{SVector{order},NTuple{order}}) where {order}
     quote
-        @inline 
+        @inline
         A = Base.Cartesian.@ntuple $order i -> begin
             _fact = 1 / factorial(i - 1)
             n     = i - 1
             Base.Cartesian.@ntuple $order j -> begin
-                @fastmath dt[j]^n * _fact 
+                @fastmath dt[j]^n * _fact
             end
         end
         tupletoSMatrix(A)
@@ -22,7 +22,7 @@ end
     coeff = bdf_coefficients(tshift)
 
 Computes Backward Difference Formula coefficient for variable step sizes using a list of times values.
-The reference current time should be 0, and the values of relative time for the `n` preceding steps should be provided.  
+The reference current time should be 0, and the values of relative time for the `n` preceding steps should be provided.
 
 # Input
 - `tshift`: reference time including previous steps.
@@ -36,7 +36,7 @@ function bdf_coefficients(tshift::Union{SVector{order, T}, NTuple{order, T}}) wh
     # Construct Vandermonde matrix
     A = Vandermonde(tshift)
 
-    # # Righ hand side
+    # Right hand side
     rhs    = @MVector zeros(T, order)
     rhs[2] = one(T)  # Representing the derivative
 
@@ -49,7 +49,3 @@ end
 export bdf_coefficients
 
 end # module BackwardDifferenceFormula
-
-
-
-
