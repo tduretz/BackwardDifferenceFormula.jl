@@ -1,7 +1,7 @@
 using Plots, StaticArrays, BackwardDifferenceFormula, LinearAlgebra
 
 function viscoelastoplastic(bdf, n)
-    
+
     # Physical parameters
     η      = 50.0
     G      = 1.0
@@ -52,7 +52,7 @@ function viscoelastoplastic(bdf, n)
         Δt000 = Δt00
         Δt00  = Δt0
         Δt0   = Δt
-        
+
         # Visco-elastic trial
         ηve   = ( 1/η + a/G )^-1
         τ     = 2*ηve* (ε̇ - (b*τ0 + c*τ00 + d*τ000 + e*τ0000)/2/G )
@@ -71,7 +71,7 @@ function viscoelastoplastic(bdf, n)
     t   = (1:Nt).*Δt
     τvec_ana = 2η*ε̇*(1 .- exp.(-G/η.*t))
     @views τvec_ana[τvec_ana.>C] .= C
-    
+
     # Visualize
     p = plot(xlabel="Time", ylabel="Stress" )
     p = plot!(t, τvec, label="Numerics")
